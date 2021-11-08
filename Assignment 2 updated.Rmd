@@ -1,0 +1,86 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+--
+title: "ANA 515 Assignment 1"
+author: "Akash Chauhan"
+date: "10/30/2021"
+output:
+  html_document:
+    df_print: paged
+  theme:
+    bootswatch: darkly
+
+
+```{r "setup", include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r library, include=FALSE}
+##calling packages
+install.packages("tidyverse")
+install.packages("knitr")
+install.packages("bslib")
+```
+
+
+
+```{r gundeaths, echo=FALSE, include=FALSE}
+## calling dataset from github
+url <- "https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv"
+Gundeaths <- read.csv(url)
+dim(Gundeaths)
+summary(Gundeaths)
+head(Gundeaths)
+tail(Gundeaths)
+```
+
+
+
+
+```{r youth, echo=FALSE, include=FALSE}
+## Making subset youth from main dataset (gundeaths)
+library(tidyverse)
+library(knitr)
+library(bslib)
+youth<-filter(Gundeaths, age<=65)
+## Calling summary for the new dataset
+summary(youth)
+
+
+```
+
+
+
+We have data about `r nrow(Gundeaths)` individuals killed by guns. Only `r nrow(Gundeaths) - nrow(youth)` are older than 65. The distribution of the remainder is shown below:
+```{r inline-code, echo=FALSE, include=FALSE}
+## Inline code
+nrow(Gundeaths)
+nrow(Gundeaths) - nrow(youth) 
+
+```
+
+
+
+
+```{r youth-dist, echo=FALSE}
+## Calling graph using ggplot fucntion
+youth %>%
+  ggplot(aes
+         (age)) + geom_freqpoly(binwidth =1)
+
+```
+
+
+
+
+```{r race-dist, echo=FALSE}
+## gun death by race
+
+youth %>%
+  ggplot(aes(fct_infreq(race) %>% fct_rev())) + geom_bar() + coord_flip() + labs(x = "victim race")
+```
+
